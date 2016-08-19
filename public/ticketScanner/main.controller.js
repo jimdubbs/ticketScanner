@@ -15,4 +15,20 @@ function MainViewController() {
 
         function activate() { }
     }
+
+MainViewController.prototype.scan = function(){
+    var vm = this;
+
+    cordova.plugins.barcodeScanner.scan(
+      function (result) {
+          alert("We got a barcode\n" +
+                "Result: " + result.text + "\n" +
+                "Format: " + result.format + "\n" +
+                "Cancelled: " + result.cancelled);
+      }, 
+      function (error) {
+          alert("Scanning failed: " + error);
+      }
+   );
+}
 })();

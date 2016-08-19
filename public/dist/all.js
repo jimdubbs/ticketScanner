@@ -55,4 +55,55 @@ function MainViewController() {
 
         function activate() { }
     }
+
+MainViewController.prototype.scan = function(){
+    var vm = this;
+
+    cordova.plugins.barcodeScanner.scan(
+      function (result) {
+          alert("We got a barcode\n" +
+                "Result: " + result.text + "\n" +
+                "Format: " + result.format + "\n" +
+                "Cancelled: " + result.cancelled);
+      }, 
+      function (error) {
+          alert("Scanning failed: " + error);
+      }
+   );
+}
+})();
+
+(function () {
+    'use strict';
+
+    angular
+        .module('ticketScanner')
+        .service('ticketService', TicketService);
+
+    TicketService.$inject = ['$http', '$q', '$state'];
+
+    function AppointmentDataService($http, $q, $state) {
+        var service = {
+            ticketResult: {},
+            scanTicket: scanTicket
+
+        };
+
+        return service;
+
+
+        function scanTicket(barcode) {
+
+            return $http.post('/api/admin/scanTicket',
+                {
+                    barcode: barcode
+                })
+                .then(function (response) {
+                    console.log(response.data);
+                    return response.data;
+                });
+        }
+
+       
+    }
 })();
